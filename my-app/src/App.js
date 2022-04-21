@@ -1,14 +1,29 @@
 import './App.css';
 import TodoList from './TodoList';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
+import { v4 } from 'uuid';
 
 function App() {
-  const [todos, setTodos] = useState(['todo1', 'todo2']);
+  const [todos, setTodos] = useState([]);
+  const todoNameRef = useRef()
+
+  function handleAddTodo(e) {
+    const name = todoNameRef.current.value
+    if (name === "") {
+      alert("Todo name is required")
+      return
+    }
+    setTodos(prevTodos =>{
+      return[...prevTodos,{id: v4() ,name: name, complete:false}]
+    })
+    todoNameRef.current.value = null;
+  }
+
   return(
     <>
       <TodoList todos={todos}/>
-      <input type="text" />
-      <button>Add todo</button>
+      <input ref={todoNameRef} type="text" />
+      <button onClick={handleAddTodo}>Add todo</button>
       <button>Clear Completed Todos</button>
       <div>0 left to do </div>
     </>
